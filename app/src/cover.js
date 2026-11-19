@@ -1,19 +1,19 @@
 // Main GTA 6 Cover Art Canvas Renderer
-// Renders authentic multi-panel comic collage, color grading, extruded typography, and badges.
+// Renders authentic multi-panel comic collages, color grading, extruded 3D typography, and badges.
 
 import { LAYOUTS, COLOR_GRADES, DEFAULT_STATE } from './constants.js';
-import { applyColorGrade, applyVignette, applyFilmGrain } from './filters.js';
+import { applyColorGrade, applyVignette, applyFilmGrain, drawWatermarkVI } from './filters.js';
 
 /**
  * Draws a complete GTA 6 style cover art.
- * Compatible with basic call (canvas, photo, caption) and advanced state.
+ * Compatible with simple invocations (canvas, photo, caption) and advanced state objects.
  */
 export function drawCover(canvas, photoOrState, captionText) {
   const ctx = canvas.getContext('2d');
   const w = canvas.width;
   const h = canvas.height;
 
-  // Unpack state or assemble default from arguments
+  // Unpack state or assemble default configuration
   let state;
   let singlePhoto = null;
   let panelPhotos = {};
@@ -32,14 +32,14 @@ export function drawCover(canvas, photoOrState, captionText) {
 
   const layout = LAYOUTS[state.layoutId] || LAYOUTS.five_panel;
   const gradeConfig = COLOR_GRADES[state.colorGrade] || COLOR_GRADES.sunset_vice;
-  const borderWidth = state.borderWidth ?? 7;
+  const borderWidth = state.borderWidth ?? 8;
   const borderColor = state.borderColor ?? '#0a0812';
 
   // 1. Base dark background
-  ctx.fillStyle = '#08050e';
+  ctx.fillStyle = '#080510';
   ctx.fillRect(0, 0, w, h);
 
-  // 2. Render each panel
+  // 2. Render each comic panel
   layout.panels.forEach((p, idx) => {
     const px = Math.round(p.x * w);
     const py = Math.round(p.y * h);
@@ -47,12 +47,12 @@ export function drawCover(canvas, photoOrState, captionText) {
     const ph = Math.round(p.h * h);
 
     ctx.save();
-    // Inner panel clipping (inset slightly for borders)
+    // Inner panel clipping (inset for border line joints)
     ctx.beginPath();
     ctx.rect(px + borderWidth / 2, py + borderWidth / 2, Math.max(1, pw - borderWidth), Math.max(1, ph - borderWidth));
     ctx.clip();
 
-    // Select photo for this panel (panel-specific > single master > null)
+    // Select photo for this panel (panel-specific > single master > fallback)
     const img = panelPhotos[idx] || singlePhoto;
 
     if (img && img.naturalWidth) {
@@ -68,7 +68,7 @@ export function drawCover(canvas, photoOrState, captionText) {
 
       ctx.drawImage(img, dx, dy, dw, dh);
     } else {
-      // Elegant procedural placeholder for unassigned panels
+      // Elegant procedural artwork for unassigned panels
       drawPlaceholderPanel(ctx, px, py, pw, ph, idx, p.tag);
     }
 
@@ -87,19 +87,24 @@ export function drawCover(canvas, photoOrState, captionText) {
   ctx.strokeStyle = borderColor;
   ctx.strokeRect(0, 0, w, h);
 
-  // 3. Global post-processing: atmospheric vignette & film texture
+  // 3. Iconic "VI" Watermark
+  if (state.showWatermarkVI !== false) {
+    drawWatermarkVI(ctx, w, h);
+  }
+
+  // 4. Global post-processing: atmospheric vignette & film texture
   applyVignette(ctx, w, h, state.vignetteStrength ?? 0.45);
   if (state.grain) {
     applyFilmGrain(ctx, w, h);
   }
 
-  // 4. Header Badge / Location Banner
+  // 5. Header Banner / Location & Year Stamp
   drawHeaderBanner(ctx, w, h, state.location);
 
-  // 5. Typography: Main GTA Title & Subtitle
+  // 6. Typography: Grand Title & Subtitle
   drawTitleTypography(ctx, w, h, state.title, state.subtitle);
 
-  // 6. Corner Rating / Parody Emblem
+  // 7. Corner Rating / Parody Emblem
   if (state.badgeStyle && state.badgeStyle !== 'none') {
     drawCornerBadge(ctx, w, h, state.badgeStyle);
   }
@@ -121,14 +126,15 @@ function drawPlaceholderPanel(ctx, x, y, w, h, idx, label) {
   ctx.fillStyle = grad;
   ctx.fillRect(x, y, w, h);
 
-  // Subtle palm tree / sun vector silhouette
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+  // Stylized sun disc silhouette
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.22)';
   ctx.beginPath();
-  ctx.arc(x + w * 0.5, y + h * 0.45, Math.min(w, h) * 0.22, 0, Math.PI * 2);
+  ctx.arc(x + w * 0.5, y + h * 0.45, Math.min(w, h) * 0.24, 0, Math.PI * 2);
   ctx.fill();
 
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-  ctx.font = `600 ${Math.max(12, Math.round(w * 0.055))}px Impact, Arial Black, sans-serif`;
+  // Panel label
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+  ctx.font = `700 ${Math.max(12, Math.round(w * 0.055))}px Impact, 'Arial Black', sans-serif`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText((label || `PANEL ${idx + 1}`).toUpperCase(), x + w / 2, y + h * 0.78);
@@ -151,17 +157,17 @@ function drawHeaderBanner(ctx, w, h, locationText) {
   const barH = fontSize * 1.8;
 
   // Background banner pill
-  ctx.fillStyle = 'rgba(10, 5, 20, 0.88)';
+  ctx.fillStyle = 'rgba(10, 5, 20, 0.90)';
   ctx.beginPath();
   ctx.roundRect((w - textWidth - paddingX * 2) / 2, barY, textWidth + paddingX * 2, barH, 4);
   ctx.fill();
   ctx.lineWidth = 2;
-  ctx.strokeStyle = '#f39c12';
+  ctx.strokeStyle = '#f5b041';
   ctx.stroke();
 
-  // Text with golden tint
+  // Golden text
   ctx.fillStyle = '#ffde59';
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
   ctx.shadowBlur = 4;
   ctx.fillText(text, w / 2, barY + (barH - fontSize) / 2);
   ctx.restore();
@@ -176,8 +182,8 @@ function drawTitleTypography(ctx, w, h, titleText, subtitleText) {
   let titleSize = Math.round(h * 0.125);
   ctx.font = `900 ${titleSize}px Impact, 'Arial Black', sans-serif`;
 
-  // Scale down title font to fit comfortably
-  while (ctx.measureText(title).width > w * 0.90 && titleSize > 24) {
+  // Scale down title font to fit comfortably within boundaries
+  while (ctx.measureText(title).width > w * 0.88 && titleSize > 24) {
     titleSize -= 3;
     ctx.font = `900 ${titleSize}px Impact, 'Arial Black', sans-serif`;
   }
@@ -191,7 +197,7 @@ function drawTitleTypography(ctx, w, h, titleText, subtitleText) {
     ctx.fillText(title, w / 2 + i * 1.4, titleY + i * 1.4);
   }
 
-  // 2. Thick Outer Stroke
+  // 2. Thick Outer Outline Stroke
   ctx.lineWidth = Math.max(6, Math.round(titleSize * 0.12));
   ctx.strokeStyle = '#05020a';
   ctx.lineJoin = 'miter';
@@ -199,7 +205,7 @@ function drawTitleTypography(ctx, w, h, titleText, subtitleText) {
   ctx.textAlign = 'center';
   ctx.strokeText(title, w / 2, titleY);
 
-  // 3. Inner Gradient Fill (Pure white to sunset gold)
+  // 3. Inner Gradient Fill (Pure crisp white to sunset gold)
   const titleGrad = ctx.createLinearGradient(0, titleY - titleSize, 0, titleY);
   titleGrad.addColorStop(0, '#ffffff');
   titleGrad.addColorStop(0.55, '#ffffff');
@@ -256,11 +262,16 @@ function drawCornerBadge(ctx, w, h, style) {
     ctx.fillText('ADVISORY', bx + bw / 2, by + bh * 0.35);
     ctx.font = `700 ${Math.round(bh * 0.16)}px Arial, sans-serif`;
     ctx.fillText('EXPLICIT ARTWORK', bx + bw / 2, by + bh * 0.68);
-  } else {
+  } else if (style === 'edition') {
     ctx.font = `900 ${Math.round(bh * 0.30)}px Impact, sans-serif`;
     ctx.fillText('SPECIAL EDITION', bx + bw / 2, by + bh * 0.20);
     ctx.font = `700 ${Math.round(bh * 0.20)}px Arial, sans-serif`;
     ctx.fillText('AI AGENT • 2026', bx + bw / 2, by + bh * 0.60);
+  } else if (style === 'star') {
+    ctx.font = `900 ${Math.round(bh * 0.32)}px Impact, sans-serif`;
+    ctx.fillText('★ VICE CITY ★', bx + bw / 2, by + bh * 0.22);
+    ctx.font = `700 ${Math.round(bh * 0.18)}px Arial, sans-serif`;
+    ctx.fillText('OFFICIAL COVER', bx + bw / 2, by + bh * 0.62);
   }
   ctx.restore();
 }

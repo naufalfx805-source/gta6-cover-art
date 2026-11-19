@@ -1,11 +1,17 @@
-// Main UI Controller and Event Coordinator for GTA 6 Cover Art Maker
+// Main UI Controller and Event Coordinator for Vice Cover Studio (GTA 6 Cover Art Maker)
 
 import { drawCover } from './cover.js';
 import { runShot } from './shots.js';
 import { DEFAULT_STATE, ASPECT_RATIOS, LAYOUTS, COLOR_GRADES } from './constants.js';
 
 // Application state
-const state = { ...DEFAULT_STATE, panelPhotos: {}, panelZoom: {}, panelPanX: {}, panelPanY: {} };
+const state = {
+  ...DEFAULT_STATE,
+  panelPhotos: {},
+  panelZoom: {},
+  panelPanX: {},
+  panelPanY: {}
+};
 let selectedPanelIndex = 0;
 
 // DOM Elements
@@ -81,6 +87,7 @@ if (ratioSelect) {
 if (layoutSelect) {
   layoutSelect.addEventListener('change', (e) => {
     state.layoutId = e.target.value;
+    updatePanelIndicator();
     redraw();
   });
 }
@@ -152,7 +159,22 @@ if (panelFileInput) {
   });
 }
 
-// Canvas Click to Select Panel for Targeted Editing
+/** Updates panel indicator and resets controls for the selected panel */
+function updatePanelIndicator() {
+  const currentLayout = LAYOUTS[state.layoutId] || LAYOUTS.five_panel;
+  if (selectedPanelIndex >= currentLayout.panels.length) {
+    selectedPanelIndex = 0;
+  }
+  const currentPanel = currentLayout.panels[selectedPanelIndex];
+  if (activePanelLabel && currentPanel) {
+    activePanelLabel.textContent = `Selected: Panel #${selectedPanelIndex + 1} (${currentPanel.tag})`;
+  }
+  if (zoomSlider) {
+    zoomSlider.value = state.panelZoom[selectedPanelIndex] || 1.0;
+  }
+}
+
+// Canvas Click to Select Panel for Targeted Customization
 canvas.addEventListener('click', (e) => {
   const rect = canvas.getBoundingClientRect();
   const clickX = ((e.clientX - rect.left) / rect.width);
@@ -163,12 +185,7 @@ canvas.addEventListener('click', (e) => {
     const p = currentLayout.panels[i];
     if (clickX >= p.x && clickX <= (p.x + p.w) && clickY >= p.y && clickY <= (p.y + p.h)) {
       selectedPanelIndex = i;
-      if (activePanelLabel) {
-        activePanelLabel.textContent = `Selected Panel: #${i + 1} (${p.tag})`;
-      }
-      if (zoomSlider) {
-        zoomSlider.value = state.panelZoom[i] || 1.0;
-      }
+      updatePanelIndicator();
       break;
     }
   }
@@ -178,13 +195,22 @@ canvas.addEventListener('click', (e) => {
 if (demoBtn) {
   demoBtn.addEventListener('click', async () => {
     try {
-      if (statusMsg) statusMsg.textContent = 'Loading demo Vice City photos...';
+      if (statusMsg) statusMsg.textContent = 'Loading Vice City sample photos...';
       const [boulevard, pier] = await Promise.all([
         loadImage('samples/boulevard.jpg'),
         loadImage('samples/pier.jpg')
       ]);
       state.masterPhoto = boulevard;
-      state.panelPhotos = { 0: boulevard, 1: pier, 2: boulevard, 3: pier, 4: boulevard, 5: pier };
+      state.panelPhotos = {
+        0: boulevard,
+        1: pier,
+        2: boulevard,
+        3: pier,
+        4: boulevard,
+        5: pier,
+        6: boulevard,
+        7: pier
+      };
       if (statusMsg) statusMsg.textContent = 'Demo photos applied across all panels!';
       redraw();
     } catch (err) {
@@ -219,13 +245,22 @@ const shot = urlParams.get('shot');
 if (shot) {
   runShot(shot, urlParams, state, redraw);
 } else {
-  // Pre-load demo samples for immediate rich visual presentation
+  // Pre-load demo samples for rich out-of-the-box visual presentation
   Promise.all([
     loadImage('samples/boulevard.jpg'),
     loadImage('samples/pier.jpg')
   ]).then(([boulevard, pier]) => {
     state.masterPhoto = boulevard;
-    state.panelPhotos = { 0: boulevard, 1: pier, 2: boulevard, 3: pier, 4: boulevard, 5: pier };
+    state.panelPhotos = {
+      0: boulevard,
+      1: pier,
+      2: boulevard,
+      3: pier,
+      4: boulevard,
+      5: pier,
+      6: boulevard,
+      7: pier
+    };
     redraw();
   }).catch(() => {
     redraw();

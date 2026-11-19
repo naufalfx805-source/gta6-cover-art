@@ -1,6 +1,6 @@
-// Automated fixed scenes for official screenshots & judge review:
-// ?shot=editor shows the complete UI editor with a loaded photo and active controls.
-// ?shot=cover shows the rendered cover alone.
+// Automated shot renderer for official screenshots & judge review:
+// ?shot=editor shows the complete UI editor with controls and photo loaded.
+// ?shot=cover shows the rendered cover canvas alone.
 // Sets window.__shotReady = true once rendering is completed.
 
 import { loadImage } from './main.js';
@@ -15,7 +15,7 @@ export async function runShot(shot, query, appState, redraw) {
   const samplePath = `samples/${photoKey}.jpg`;
   const alternateSample = samplePath.includes('pier') ? 'samples/boulevard.jpg' : 'samples/pier.jpg';
 
-  // Load both sample images for rich multi-panel demonstration
+  // Load both sample images for rich multi-panel composition
   try {
     const [imgPrimary, imgSecondary] = await Promise.all([
       loadImage(samplePath),
@@ -33,7 +33,9 @@ export async function runShot(shot, query, appState, redraw) {
       2: imgSecondary,
       3: imgPrimary,
       4: imgSecondary,
-      5: imgPrimary
+      5: imgPrimary,
+      6: imgSecondary,
+      7: imgPrimary
     };
 
     if (query.get('grade')) {
@@ -41,6 +43,9 @@ export async function runShot(shot, query, appState, redraw) {
     }
     if (query.get('layout')) {
       appState.layoutId = query.get('layout');
+    }
+    if (query.get('ratio')) {
+      appState.ratio = query.get('ratio');
     }
 
     redraw();
