@@ -1,0 +1,6 @@
+[
+  { "name": "1-cover.jpg", "query": "?shot=cover&photo=pier&caption=VICE%20HEIST&grade=sunset_vice&layout=five_panel", "w": 1080, "h": 1080 },
+  { "name": "2-editor.jpg", "query": "?shot=editor&photo=boulevard&caption=LEONIDA%20NIGHTS&grade=neon_heat&layout=five_panel", "w": 1280, "h": 720 },
+  { "name": "3-cover-neon.jpg", "query": "?shot=cover&photo=boulevard&caption=NEON%20STREETS&grade=neon_heat&layout=six_grid", "w": 1080, "h": 1080 },
+  { "name": "4-cover-golden.jpg", "query": "?shot=cover&photo=pier&caption=GOLDEN%20COAST&grade=miami_golden&layout=triple_slash", "w": 1280, "h": 720 }
+]

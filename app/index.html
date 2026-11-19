@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vice Cover Studio • GTA 6 Style Art Maker</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="studio-layout">
+    <!-- Sidebar Control Panel -->
+    <aside class="sidebar" aria-label="Editor controls">
+      <header class="header">
+        <div class="logo-badge">VICE 6</div>
+        <div>
+          <h1 class="app-title">Cover Studio</h1>
+          <p class="app-desc">Multi-panel GTA 6 poster artwork maker</p>
+        </div>
+      </header>
+
+      <section class="control-group">
+        <h2>📐 Canvas & Layout</h2>
+        <div class="control-row">
+          <label for="ratio-select">Aspect Ratio</label>
+          <select id="ratio-select">
+            <option value="square" selected>Square 1:1 (1080 x 1080)</option>
+            <option value="portrait">Portrait 4:5 (1080 x 1350)</option>
+            <option value="landscape">Landscape 16:9 (1920 x 1080)</option>
+          </select>
+        </div>
+
+        <div class="control-row">
+          <label for="layout-select">Panel Grid</label>
+          <select id="layout-select">
+            <option value="five_panel" selected>Vice Iconic (5 Panels)</option>
+            <option value="six_grid">Leonida Grid (6 Panels)</option>
+            <option value="triple_slash">Action Triptych (3 Slashes)</option>
+            <option value="solo_poster">Single Hero Poster (1 Panel)</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="control-group">
+        <h2>🖼️ Photos & Panels</h2>
+        <div class="control-row">
+          <label for="master-photo">Master Photo (Auto-Fill)</label>
+          <input id="master-photo" type="file" accept="image/*">
+        </div>
+
+        <div class="panel-editor-box">
+          <div id="active-panel-label" class="panel-indicator">Selected: Panel #1 (Top Left)</div>
+          <div class="control-row">
+            <label for="panel-photo">Replace Selected Panel Photo</label>
+            <input id="panel-photo" type="file" accept="image/*">
+          </div>
+          <div class="control-row">
+            <label for="zoom-slider">Panel Zoom</label>
+            <input id="zoom-slider" type="range" min="0.5" max="2.5" step="0.05" value="1.0">
+          </div>
+        </div>
+
+        <button id="demo-btn" type="button" class="btn btn-secondary">⚡ Load Sample Photos</button>
+      </section>
+
+      <section class="control-group">
+        <h2>🎨 Vice City Color Grading</h2>
+        <div class="control-row">
+          <label for="grade-select">Color Grade Preset</label>
+          <select id="grade-select">
+            <option value="sunset_vice" selected>Vice Sunset (Golden/Magenta)</option>
+            <option value="neon_heat">Neon Heat (Cyan/Hot Pink)</option>
+            <option value="miami_golden">Golden Hour Florida</option>
+            <option value="crime_noir">Gritty Crime Noir</option>
+            <option value="pure_clean">Clean Original</option>
+          </select>
+        </div>
+
+        <div class="control-row">
+          <label for="vignette-slider">Atmospheric Vignette</label>
+          <input id="vignette-slider" type="range" min="0" max="0.9" step="0.05" value="0.45">
+        </div>
+
+        <div class="control-row">
+          <label for="border-slider">Comic Divider Width</label>
+          <input id="border-slider" type="range" min="3" max="15" step="1" value="7">
+        </div>
+      </section>
+
+      <section class="control-group">
+        <h2>✍️ Lettering & Badges</h2>
+        <div class="control-row">
+          <label for="title-input">Main Title</label>
+          <input id="title-input" type="text" maxlength="32" value="VICE HEIST">
+        </div>
+
+        <div class="control-row">
+          <label for="subtitle-input">Subtitle / Story Tag</label>
+          <input id="subtitle-input" type="text" maxlength="48" value="A LEONIDA CRIME STORY">
+        </div>
+
+        <div class="control-row">
+          <label for="location-input">Location Banner</label>
+          <input id="location-input" type="text" maxlength="32" value="VICE CITY • 2026">
+        </div>
+
+        <div class="control-row">
+          <label for="badge-select">Corner Emblem</label>
+          <select id="badge-select">
+            <option value="parental" selected>Parental Advisory Emblem</option>
+            <option value="edition">Special Agent Edition</option>
+            <option value="none">None</option>
+          </select>
+        </div>
+      </section>
+
+      <div class="actions">
+        <button id="export-btn" type="button" class="btn btn-primary">💾 Export Full PNG</button>
+        <div id="status-msg" class="status-msg" role="status">Ready</div>
+      </div>
+    </aside>
+
+    <!-- Canvas Preview Stage -->
+    <main class="preview-stage" aria-label="Canvas preview viewport">
+      <div class="canvas-wrapper">
+        <canvas id="cover" width="1080" height="1080" aria-label="GTA 6 Style Cover Canvas"></canvas>
+      </div>
+      <div class="tip-bar">
+        💡 <span>Click any panel on the canvas to select and customize its individual photo.</span>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
