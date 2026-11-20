@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vice Cover Studio — GTA 6 Style Cover Art Maker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Control Panel -->
+    <aside class="sidebar">
+      <header class="brand-header">
+        <h1 class="brand-title">Vice Cover Studio</h1>
+        <p class="brand-subtitle">GTA 6 Cover Art Maker</p>
+      </header>
+
+      <!-- Multi-panel Layouts -->
+      <section class="control-group">
+        <h2 class="section-title">Layout</h2>
+        <div id="layout-selector" class="btn-grid">
+          <!-- Dynamic Layout Buttons -->
+        </div>
+      </section>
+
+      <!-- Vice City Color Grades -->
+      <section class="control-group">
+        <h2 class="section-title">Color Grade</h2>
+        <div id="grade-selector" class="btn-grid">
+          <!-- Dynamic Color Grade Buttons -->
+        </div>
+      </section>
+
+      <!-- Cover Caption -->
+      <section class="control-group">
+        <h2 class="section-title">Caption Title</h2>
+        <input type="text" id="caption-input" placeholder="e.g. VICE CITY DREAMS" maxlength="32">
+      </section>
+
+      <!-- Photo Selection / Local Upload -->
+      <section class="control-group">
+        <h2 class="section-title">Your Photos (Offline)</h2>
+        <div class="file-upload-wrapper">
+          <label for="photo-upload" class="btn-upload">📷 Load Custom Photos</label>
+          <input type="file" id="photo-upload" multiple accept="image/*">
+        </div>
+      </section>
+
+      <!-- Output Size -->
+      <section class="control-group">
+        <h2 class="section-title">Export Size</h2>
+        <select id="size-select">
+          <!-- Options populated by main.js -->
+        </select>
+      </section>
+
+      <!-- Export Button -->
+      <button id="export-btn" class="btn-primary">Download Cover Art (PNG)</button>
+    </aside>
+
+    <!-- Canvas Interactive Viewport -->
+    <main class="canvas-viewport">
+      <canvas id="cover-canvas"></canvas>
+    </main>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+  <script type="module" src="src/shots.js"></script>
+</body>
+</html>
