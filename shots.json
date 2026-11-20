@@ -1,0 +1,26 @@
+[
+  {
+    "name": "1-cover.jpg",
+    "query": "?shot=cover-golden&photo=boulevard&caption=Vice+City+Dreams",
+    "w": 1280,
+    "h": 720
+  },
+  {
+    "name": "2-editor.jpg",
+    "query": "?shot=editor&photo=pier&caption=Neon+Nights",
+    "w": 1280,
+    "h": 720
+  },
+  {
+    "name": "3-cover-neon.jpg",
+    "query": "?shot=cover&photo=boulevard&caption=Vice+Key+Art",
+    "w": 1080,
+    "h": 1080
+  },
+  {
+    "name": "4-cover-golden.jpg",
+    "query": "?shot=cover-neon&photo=pier&caption=Golden+Heist",
+    "w": 1024,
+    "h": 1280
+  }
+]

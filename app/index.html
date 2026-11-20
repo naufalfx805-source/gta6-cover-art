@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vice Cover Studio — GTA 6 Cover Art Creator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- LEFT STUDIO CONTROLS -->
+    <aside class="sidebar">
+      <header class="sidebar-header">
+        <div class="brand-badge">
+          <div class="logo-vi">VI</div>
+          <div>
+            <div class="brand-title">VICE STUDIO</div>
+            <div class="brand-subtitle">COVER ART CREATOR</div>
+          </div>
+        </div>
+        <div class="status-pill">PRO ENGINE</div>
+      </header>
+
+      <div class="sidebar-content">
+        <!-- 1. Comic Layout Preset -->
+        <section class="control-group">
+          <div class="group-title">
+            <span>Box Art Layout</span>
+            <span class="tag">COMIC PANELS</span>
+          </div>
+          <div class="layout-grid">
+            <button class="btn-layout active" data-layout="five-panel">Five Panel</button>
+            <button class="btn-layout" data-layout="classic-six">Classic Six</button>
+            <button class="btn-layout" data-layout="triptych">Triptych</button>
+            <button class="btn-layout" data-layout="split">Split Duo</button>
+            <button class="btn-layout" data-layout="solo">Solo Hero</button>
+          </div>
+        </section>
+
+        <!-- 2. Color Grading Preset -->
+        <section class="control-group">
+          <div class="group-title">
+            <span>Color Grading</span>
+            <span class="tag">NEON WASH</span>
+          </div>
+          <div class="grade-grid">
+            <button class="btn-grade active" data-grade="vice-sunset">
+              <span class="swatch swatch-sunset"></span>
+              <span>Vice Sunset</span>
+            </button>
+            <button class="btn-grade" data-grade="neon-night">
+              <span class="swatch swatch-neon"></span>
+              <span>Neon Night</span>
+            </button>
+            <button class="btn-grade" data-grade="golden-hour">
+              <span class="swatch swatch-golden"></span>
+              <span>Golden Hour</span>
+            </button>
+            <button class="btn-grade" data-grade="vice-noir">
+              <span class="swatch swatch-noir"></span>
+              <span>Vice Noir</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 3. Photo Sources -->
+        <section class="control-group">
+          <div class="group-title">
+            <span>Photo Source</span>
+            <span class="tag">PANELS</span>
+          </div>
+          <div class="sample-row">
+            <button class="btn-sample active" data-sample="pier">Pier</button>
+            <button class="btn-sample" data-sample="boulevard">Boulevard</button>
+          </div>
+          <label class="btn-upload">
+            <span>+ Upload Custom Photo</span>
+            <input type="file" id="photo-upload" accept="image/*">
+          </label>
+        </section>
+
+        <!-- 4. Typography -->
+        <section class="control-group">
+          <div class="group-title">
+            <span>Cover Typography</span>
+            <span class="tag">3D EXTRUDED</span>
+          </div>
+          <input type="text" id="caption-input" class="input-text" placeholder="MAIN TITLE" value="VICE DREAMS">
+          <input type="text" id="subtitle-input" class="input-text" placeholder="SUBTITLE" value="A VICE CITY TALE">
+        </section>
+
+        <!-- 5. Studio Finishing Sliders -->
+        <section class="control-group">
+          <div class="group-title">
+            <span>Studio Finishing</span>
+            <span class="tag">ANALOG FX</span>
+          </div>
+          <div class="slider-container">
+            <div class="slider-label">
+              <span>Edge Vignette</span>
+            </div>
+            <input type="range" id="slider-vignette" min="0" max="0.8" step="0.05" value="0.35">
+          </div>
+          <div class="slider-container">
+            <div class="slider-label">
+              <span>Film Grain</span>
+            </div>
+            <input type="range" id="slider-grain" min="0" max="0.3" step="0.02" value="0.12">
+          </div>
+        </section>
+      </div>
+
+      <!-- Export Footer -->
+      <footer class="sidebar-footer">
+        <select id="export-size-select" class="select-export">
+          <option value="square">1080 × 1080 (Square Cover)</option>
+          <option value="portrait">1024 × 1280 (Portrait Poster)</option>
+          <option value="landscape">1280 × 720 (Widescreen Hero)</option>
+        </select>
+        <button id="btn-export" class="btn-primary">
+          <span>Export Key Art</span>
+          <span style="font-size:10px; opacity:0.8;">[Ctrl+Enter]</span>
+        </button>
+      </footer>
+    </aside>
+
+    <!-- CENTER PREVIEW STAGE -->
+    <main class="stage">
+      <div class="stage-badge">
+        <span>VICE ENGINE v3.0</span>
+        <span>•</span>
+        <span>HARDWARE ACCELERATED COMIC PIPELINE</span>
+      </div>
+      <div class="canvas-wrapper">
+        <canvas id="preview-canvas" width="1080" height="1080"></canvas>
+      </div>
+    </main>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
