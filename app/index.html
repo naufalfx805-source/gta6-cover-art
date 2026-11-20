@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vice Cover Studio — GTA 6 Style Cover Maker</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Control Panel -->
+    <aside class="sidebar">
+      <div class="brand">
+        <h1 class="brand-title">Vice Studio</h1>
+        <p class="brand-subtitle">GTA 6 Cover Art & Poster Generator</p>
+      </div>
+
+      <!-- Layout Selector -->
+      <div class="control-group">
+        <label>Panel Layout</label>
+        <div class="button-grid">
+          <button type="button" class="btn-option active" data-layout="five-panel">5-Panel Hero</button>
+          <button type="button" class="btn-option" data-layout="triptych">3-Panel Triptych</button>
+          <button type="button" class="btn-option" data-layout="split">2-Panel Split</button>
+          <button type="button" class="btn-option" data-layout="solo">Solo Full</button>
+        </div>
+      </div>
+
+      <!-- Color Grading -->
+      <div class="control-group">
+        <label>Vice City Grade</label>
+        <div class="button-grid">
+          <button type="button" class="btn-option active" data-grade="vice-sunset">Vice Sunset</button>
+          <button type="button" class="btn-option" data-grade="neon-night">Neon Night</button>
+          <button type="button" class="btn-option" data-grade="golden-hour">Golden Hour</button>
+          <button type="button" class="btn-option" data-grade="noir">Vice Noir</button>
+        </div>
+      </div>
+
+      <!-- Typography -->
+      <div class="control-group">
+        <label for="caption-input">Main Title</label>
+        <input id="caption-input" type="text" maxlength="32" value="VICE CITY DREAMS" placeholder="MAIN TITLE">
+      </div>
+
+      <div class="control-group">
+        <label for="subcaption-input">Subtitle / Badge</label>
+        <input id="subcaption-input" type="text" maxlength="24" value="COMING SOON" placeholder="SUBTITLE">
+      </div>
+
+      <!-- Photo Controls -->
+      <div class="control-group">
+        <label>Custom Photos</label>
+        <div class="file-input-wrapper">
+          <button type="button" class="btn-secondary" style="width: 100%;">Upload Your Photos</button>
+          <input id="photo-upload-input" type="file" accept="image/*" multiple>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 4px;">
+          <button type="button" id="sample-pier-btn" class="btn-secondary" style="flex: 1;">Sample: Pier</button>
+          <button type="button" id="sample-boulevard-btn" class="btn-secondary" style="flex: 1;">Sample: Neon</button>
+        </div>
+      </div>
+
+      <!-- Export Resolution -->
+      <div class="control-group">
+        <label for="export-size-select">Export Format</label>
+        <select id="export-size-select">
+          <option value="square">Square 1:1 (1080 x 1080)</option>
+          <option value="portrait">Portrait 4:5 (1080 x 1350)</option>
+          <option value="landscape">Landscape 16:9 (1920 x 1080)</option>
+        </select>
+      </div>
+
+      <!-- Export CTA -->
+      <button id="download-btn" type="button" class="btn-primary">Export Poster (PNG)</button>
+    </aside>
+
+    <!-- Canvas Preview Viewport -->
+    <main class="viewport">
+      <canvas id="cover-canvas" width="1080" height="1080" aria-label="GTA Cover Art Canvas"></canvas>
+    </main>
+  </div>
+
+  <script type="module">
+    import { initApp, appState, loadImage, render, initUI } from './src/main.js';
+    import { runShot } from './src/shots.js';
+
+    async function start() {
+      const query = new URLSearchParams(window.location.search);
+      const shot = query.get('shot');
+      if (shot) {
+        initUI();
+        await runShot(shot, query, appState, loadImage, render);
+      } else {
+        await initApp();
+      }
+    }
+    start();
+  </script>
+</body>
+</html>
